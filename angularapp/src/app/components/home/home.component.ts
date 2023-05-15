@@ -11,11 +11,10 @@ import { EmpDetailDialogComponent } from '../emp-detail-dialog/emp-detail-dialog
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
 })
 
 export class HomeComponent implements OnInit, AfterViewInit {
-
   /**
    * Create an empty employee array to store
    * the employees fetched from firestore and
@@ -36,27 +35,27 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Define the columns schema for the table and
    * loop the keys to form string array of keys to
    * dynamically map the table columns with headers
-  */
+   */
   columnSchema: any[] = [
     {
       key: 'EMP_ID',
-      label: 'Employee ID'
+      label: 'Employee ID',
     },
     {
       key: 'Name',
-      label: 'Name'
+      label: 'Name',
     },
     {
       key: 'Email',
-      label: 'Email Address'
+      label: 'Email Address',
     },
     {
       key: 'action',
-      label: 'Action'
+      label: 'Action',
     },
-  ]
+  ];
 
-  columns: string[] = this.columnSchema.map(col=>col.key);
+  columns: string[] = this.columnSchema.map((col) => col.key);
 
   /**
    * Link the mat table data source to receive
@@ -70,9 +69,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private es: EmployeeService, private dialog: MatDialog) {
-    // this.retrieveAllEmployees();
-  }
+  constructor(private es: EmployeeService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.retrieveAllEmployees();
@@ -91,23 +88,28 @@ export class HomeComponent implements OnInit, AfterViewInit {
   retrieveAllEmployees() {
     this.es.getAllEmployees().subscribe(res => {
       res.map(item => {
-        this.employeeList.push({
+        // this.employeeList.push({
+        this.employeeList.unshift({
           id: item.payload.doc.id,
-          EMP_ID: JSON.parse(JSON.stringify(item.payload.doc.data())).EMP_ID,
-          Name: JSON.parse(JSON.stringify(item.payload.doc.data())).Name,
-          Email: JSON.parse(JSON.stringify(item.payload.doc.data())).Email
+          EMP_ID: item.payload.doc.get('EMP_ID'),
+          Name: item.payload.doc.get('Name'),
+          Email: item.payload.doc.get('Email')
         });
       });
 
       this.dataSource.data = this.employeeList;
 
       /* set page numbers dynamically  based on records retrieved from firestore */
-      this.employeeListLength = Array.from({ length: this.employeeList.length }, (_,k) => k+1);
-    })
+      this.employeeListLength = Array.from(
+        { length: this.employeeList.length },
+        (_, k) => k + 1
+      );
+    });
+
   }
 
   addNewEmployee() {
-    this.dialog.open(EmpDetailDialogComponent, {
+    const dialogRef = this.dialog.open(EmpDetailDialogComponent, {
       disableClose: true,
       /*
         maxWidth: '100vw',
@@ -117,12 +119,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
         panelClass: 'fixActionRow',
         autoFocus: false,
       */
-    })
+    });
+
+    dialogRef.afterClosed().subscribe((res) => {
+      this.es.addEmployee(res);
+    });
   }
 
   editSelectedEmployee(employee: Employee) {
-    console.log(employee);
-    this.dialog.open(EmpDetailDialogComponent, {
+    const dialogRef = this.dialog.open(EmpDetailDialogComponent, {
       disableClose: true,
       /*
         maxWidth: '100vw',
@@ -132,8 +137,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
         panelClass: 'fixActionRow',
         autoFocus: false,
       */
-      data: { employee }
-    })
+      data: { employee },
+    });
+
+    dialogRef.afterClosed().subscribe((res) => {
+      this.es.updateEmployeeById(res.id, res);
+    });
   }
 
   deleteSelectedEmployee(employee: Employee) {

@@ -37,11 +37,13 @@ export class EmpDetailDialogComponent implements OnInit {
   }
 
   saveEmployee() {
+    /*
     if(this.data) {
       this.es.updateEmployeeById(this.data.employee.id, this.employeeForm.value);
     } else {
       this.es.addEmployee(this.employeeForm.value);
     }
+    */
   }
 
 }
