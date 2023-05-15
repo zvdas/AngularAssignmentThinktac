@@ -1,1 +1,30 @@
-<p>emp-detail-dialog works!</p>
+<h2 mat-dialog-title>Edit Employee</h2>
+
+<form [formGroup]="employeeForm" (ngSubmit)="saveEmployee()">
+  <mat-dialog-content class="mat-topography">
+    <div class="row">
+      <input type="hidden" formControlName="id" readonly />
+
+      <mat-form-field
+        *ngFor="let control of formControlNames"
+        class="mx-2"
+        appearance="outline"
+      >
+        <mat-label>{{ control.label }}</mat-label>
+        <input matInput [formControlName]="control.fcName" />
+      </mat-form-field>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="justify-content-center">
+    <button class="btn btn-link" mat-dialog-close>Cancel</button>
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="!employeeForm.valid"
+      [mat-dialog-close]="employeeForm.value"
+    >
+      Save
+    </button>
+  </mat-dialog-actions>
+</form>

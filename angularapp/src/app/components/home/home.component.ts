@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, IterableDiffers } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -31,7 +31,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * fetched from firestore
    */
   selectedEmployee: Employee = {} as Employee;
-  fireDocIds: string[] = [];
 
   /**
    * Define the columns schema for the table and
@@ -91,12 +90,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   retrieveAllEmployees() {
     this.es.getAllEmployees().subscribe(res => {
-      // this.employeeList = this.dataSource.data = res.map(item=>item.payload.doc.data()) as Employee[];
-
-      // this.fireDocIds = res.map(ids => ids.payload.doc.id);
-      // console.log(res.map(item=>item.payload.doc.id));
-      // res.map(item=>{this.employeeList.map(emp=>{emp.id = item.payload.doc.id})});
-
       res.map(item => {
         this.employeeList.push({
           id: item.payload.doc.id,
