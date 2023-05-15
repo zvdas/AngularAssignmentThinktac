@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "angular-thinktac-14fac": {
+      "hosting": {
+        "angularapp": [
+          "angular-thinktac-14fac"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "angular-thinktac-14fac"
+  }
+}
