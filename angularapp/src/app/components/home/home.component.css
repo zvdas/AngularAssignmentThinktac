@@ -1,0 +1,21 @@
+.headers {
+    font-size: 100%;
+    background-color: navy;
+    vertical-align: middle;
+}
+
+.data {
+    vertical-align: middle;
+}
+
+.footer {
+    border: 1px;
+}
+
+/* mat-dialog-container { */
+.cdk-overlay-pane {
+    background-color: white !important;
+    /* background-color: transparent !important; */
+  /* padding: 0px 0px 0px 0px !important; */
+  /* overflow: hidden !important; */
+}

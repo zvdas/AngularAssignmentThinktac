@@ -1,15 +1,16 @@
 <h2 mat-dialog-title>Edit Employee</h2>
 
 <form [formGroup]="employeeForm" (ngSubmit)="saveEmployee()">
-  <mat-dialog-content class="mat-topography">
+  <mat-dialog-content
+    class="mat-topography"
+    *ngFor="let control of formControlNames"
+  >
     <div class="row">
       <input type="hidden" formControlName="id" readonly />
 
-      <mat-form-field
-        *ngFor="let control of formControlNames"
-        class="mx-2"
-        appearance="outline"
-      >
+      <label class="form-label">{{ control.label.split(' ')[1] }}</label>
+
+      <mat-form-field class="mx-2" appearance="outline">
         <mat-label>{{ control.label }}</mat-label>
         <input matInput [formControlName]="control.fcName" />
       </mat-form-field>

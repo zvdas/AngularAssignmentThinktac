@@ -108,17 +108,20 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   }
 
+  applyFilter(event: Event) {
+    this.dataSource.filter = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    if(this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  /**
+   * Opens a dialog containing a form to create a new employee
+   */
   addNewEmployee() {
     const dialogRef = this.dialog.open(EmpDetailDialogComponent, {
       disableClose: true,
-      /*
-        maxWidth: '100vw',
-        maxHeight: '100vh',
-        width: '98%',
-        height: '98%',
-        panelClass: 'fixActionRow',
-        autoFocus: false,
-      */
+      width: '50%'
     });
 
     dialogRef.afterClosed().subscribe((res) => {
@@ -126,17 +129,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
   }
 
+  /**
+   * Opens a dialog with a form containing the existing details to be updated
+   */
   editSelectedEmployee(employee: Employee) {
     const dialogRef = this.dialog.open(EmpDetailDialogComponent, {
       disableClose: true,
-      /*
-        maxWidth: '100vw',
-        maxHeight: '100vh',
-        width: '98%',
-        height: '98%',
-        panelClass: 'fixActionRow',
-        autoFocus: false,
-      */
+      width: '50%',
       data: { employee },
     });
 

@@ -1,19 +1,24 @@
-<mat-card class="overflow-auto bg-light m-5 p-5 d-flex justify-content-center">
-  <div class="col-md-10 col-md-8 col-sm-4">
+<mat-card class="overflow-auto bg-light m-3 p-3 d-flex justify-content-center">
+  <div class="col">
     <mat-card-header class="d-flex justify-content-center">
       <mat-card-title class="text-dark">Employee Table</mat-card-title>
     </mat-card-header>
+
+    <mat-form-field class="w-100 bg-primary form-control">
+      <mat-label>Search</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Enter name or email or employee id" #input>
+    </mat-form-field>
 
     <button class="btn btn-primary my-3 w-100" (click)="addNewEmployee()">
       Add New Employee
     </button>
 
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 w-100">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 w-100 bg-white table table-striped">
       <div *ngFor="let column of columnSchema" [matColumnDef]="column.key">
-        <th class="text-center" mat-header-cell *matHeaderCellDef>
+        <th class="text-center text-light headers" mat-header-cell *matHeaderCellDef>
           {{ column.label }}
         </th>
-        <td class="text-center" mat-cell *matCellDef="let row">
+        <td class="text-center text-dark data" mat-cell *matCellDef="let row">
           <ng-container [ngSwitch]="column.key">
             <ng-container *ngSwitchCase="'action'">
               <button
@@ -44,7 +49,7 @@
     </table>
 
     <mat-paginator
-      class="d-flex justify-content-center"
+      class="d-flex justify-content-center footer bg-light text-dark"
       [pageSizeOptions]="[5, 10, 25, 100]"
       aria-label="Select page of employeeListLength"
     ></mat-paginator>
