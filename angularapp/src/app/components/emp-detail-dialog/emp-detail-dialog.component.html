@@ -2,20 +2,30 @@
 
 <form [formGroup]="employeeForm" (ngSubmit)="saveEmployee()">
   <mat-dialog-content
-    class="mat-topography"
-    *ngFor="let control of formControlNames"
+  class="mat-topography"
+  *ngFor="let control of formControlNames"
   >
     <div class="row">
       <input type="hidden" formControlName="id" readonly />
 
+      <!-- Field labels -->
       <label class="form-label">{{ control.label.split(' ')[1] }}</label>
 
+      <!-- Dynamically created forms linked to formControlNames array in ts file -->
       <mat-form-field class="mx-2" appearance="outline">
         <mat-label>{{ control.label }}</mat-label>
         <input matInput [formControlName]="control.fcName" />
       </mat-form-field>
     </div>
   </mat-dialog-content>
+
+  <!-- Display form validation error messages  -->
+  <mat-error *ngIf="email?.hasError('email') && !email?.hasError('required')">
+    Please enter a valid email address
+  </mat-error>
+  <mat-error *ngIf="empId?.hasError('required')">Employee id is required</mat-error>
+  <mat-error *ngIf="name?.hasError('required')">Employee name is required</mat-error>
+  <mat-error *ngIf="email?.hasError('required')">Employee email is required</mat-error>
 
   <mat-dialog-actions class="justify-content-center">
     <button class="btn btn-link" mat-dialog-close>Cancel</button>

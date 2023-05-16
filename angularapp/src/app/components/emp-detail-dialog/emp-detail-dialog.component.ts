@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { Employee } from 'src/app/models/employee/employee';
 import { EmployeeService } from 'src/app/services/employee/employee.service';
@@ -28,10 +28,14 @@ export class EmpDetailDialogComponent implements OnInit {
    */
   employeeForm = new FormGroup({
     id: new FormControl(''),
-    EMP_ID: new FormControl(),
-    Name: new FormControl(''),
-    Email: new FormControl(''),
+    EMP_ID: new FormControl(undefined, Validators.required),
+    Name: new FormControl('', Validators.required),
+    Email: new FormControl('', [Validators.required, Validators.email]),
   })
+
+  get empId() { return this.employeeForm.get('EMP_ID') }
+  get name() { return this.employeeForm.get('Name') }
+  get email() { return this.employeeForm.get('Email') }
 
   /**
    * Data Injected into dialog initialized here
