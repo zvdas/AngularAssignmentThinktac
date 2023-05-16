@@ -27,8 +27,7 @@ export class EmployeeService {
 
   /* get all employees from firestore */
   getAllEmployees() {
-    // return this.fs.collection('employee', ref => ref.orderBy('EMP_ID', 'asc')).snapshotChanges();
-    return this.fs.collection('employee', ref => ref.orderBy('EMP_ID', 'desc')).snapshotChanges();
+    return this.fs.collection('employee', ref => ref.orderBy('EMP_ID', 'asc')).snapshotChanges();
   }
 
   /* update employee in firestore by id */

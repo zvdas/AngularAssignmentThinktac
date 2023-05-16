@@ -87,15 +87,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   retrieveAllEmployees() {
     this.es.getAllEmployees().subscribe(res => {
-      res.map(item => {
-        // this.employeeList.push({
-        this.employeeList.unshift({
-          id: item.payload.doc.id,
-          EMP_ID: item.payload.doc.get('EMP_ID'),
-          Name: item.payload.doc.get('Name'),
-          Email: item.payload.doc.get('Email')
-        });
-      });
+      this.employeeList =
+      res.map(item => ({
+       id: item.payload.doc.id,
+       EMP_ID: item.payload.doc.get('EMP_ID'),
+       Name: item.payload.doc.get('Name'),
+       Email: item.payload.doc.get('Email')
+      }));
 
       this.dataSource.data = this.employeeList;
 
@@ -108,6 +106,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   }
 
+  /**
+   * Filter box above table takes user input to filter data in the table using HTMLInputElement
+   */
   applyFilter(event: Event) {
     this.dataSource.filter = (event.target as HTMLInputElement).value.trim().toLowerCase();
     if(this.dataSource.paginator) {
@@ -144,6 +145,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
   }
 
+  /**
+   * Passes the employee id to deleteEmployeeById method of employee service
+   */
   deleteSelectedEmployee(employee: Employee) {
     this.es.deleteEmployeeById(employee.id);
   }
