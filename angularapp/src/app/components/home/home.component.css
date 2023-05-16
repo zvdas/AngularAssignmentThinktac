@@ -1,8 +1,10 @@
-.headers {
+/* .headers { */
+th {
     font-size: 100%;
     background-color: navy;
     vertical-align: middle;
 }
+
 
 .data {
     vertical-align: middle;

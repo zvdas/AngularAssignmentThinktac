@@ -13,9 +13,9 @@
       Add New Employee
     </button>
 
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 w-100 bg-white table table-striped">
-      <div *ngFor="let column of columnSchema" [matColumnDef]="column.key">
-        <th class="text-center text-light headers" mat-header-cell *matHeaderCellDef>
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 w-100 bg-white table table-striped" matSort>
+      <div *ngFor="let column of columnSchema" class="justify-content-center" [matColumnDef]="column.key">
+        <th class="text-light headers" mat-header-cell mat-sort-header *matHeaderCellDef>
           {{ column.label }}
         </th>
         <td class="text-center text-dark data" mat-cell *matCellDef="let row">
@@ -46,6 +46,11 @@
 
       <tr mat-header-row *matHeaderRowDef="columns"></tr>
       <tr mat-row *matRowDef="let row; columns: columns"></tr>
+
+      <!-- Row shown when there is no matching data. -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+      </tr>
     </table>
 
     <mat-paginator

@@ -11,6 +11,10 @@ import { Employee } from 'src/app/models/employee/employee';
 
 export class EmployeeService {
 
+  /**
+   * instantiate angularFirestore to perform database operations and
+   * snackbar to display error/success messages after firestore operations
+  */
   constructor(private fs: AngularFirestore, private snackbar: MatSnackBar) { }
 
   /* create new employee in firestore */
@@ -25,7 +29,7 @@ export class EmployeeService {
     return this.fs.collection('employee').doc(id).snapshotChanges();
   }
 
-  /* get all employees from firestore */
+  /* get all employees from firestore, sorted in ascending order of employee ids */
   getAllEmployees() {
     return this.fs.collection('employee', ref => ref.orderBy('EMP_ID', 'asc')).snapshotChanges();
   }

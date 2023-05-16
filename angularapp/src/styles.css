@@ -12,3 +12,8 @@ mat-dialog-container {
     color: black !important;
     background-color: white !important;
 }
+
+.mat-sort-header-container {
+    display: flex;
+    justify-content: center;
+}

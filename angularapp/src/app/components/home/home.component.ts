@@ -58,8 +58,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   columns: string[] = this.columnSchema.map((col) => col.key);
 
   /**
-   * Link the mat table data source to receive
-   * values from array list (which retrieves from firestore)
+   * Link the mat table data source to render
+   * values from array list (which is retrieved from firestore)
    */
   dataSource = new MatTableDataSource<Employee>(this.employeeList);
   /**
@@ -118,6 +118,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   /**
    * Opens a dialog containing a form to create a new employee
+   * after the dialog closes, passes form data to employee service
    */
   addNewEmployee() {
     const dialogRef = this.dialog.open(EmpDetailDialogComponent, {
@@ -132,6 +133,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   /**
    * Opens a dialog with a form containing the existing details to be updated
+   * after the dialog closes, passes form data to employee service
    */
   editSelectedEmployee(employee: Employee) {
     const dialogRef = this.dialog.open(EmpDetailDialogComponent, {
