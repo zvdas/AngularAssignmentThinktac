@@ -121,14 +121,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * after the dialog closes, passes form data to employee service
    */
   addNewEmployee() {
-    const dialogRef = this.dialog.open(EmpDetailDialogComponent, {
+    // const dialogRef =
+    this.dialog.open(EmpDetailDialogComponent, {
       disableClose: true,
       width: '50%'
     });
 
+    /*
     dialogRef.afterClosed().subscribe((res) => {
       this.es.addEmployee(res);
     });
+    */
   }
 
   /**
@@ -136,15 +139,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * after the dialog closes, passes form data to employee service
    */
   editSelectedEmployee(employee: Employee) {
-    const dialogRef = this.dialog.open(EmpDetailDialogComponent, {
+    // const dialogRef =
+    this.dialog.open(EmpDetailDialogComponent, {
       disableClose: true,
       width: '50%',
       data: { employee },
     });
 
+    /*
     dialogRef.afterClosed().subscribe((res) => {
       this.es.updateEmployeeById(res.id, res);
     });
+    */
   }
 
   /**
