@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { first } from 'rxjs';
 
 import { Employee } from 'src/app/models/employee/employee';
 import { EmployeeService } from 'src/app/services/employee/employee.service';
@@ -86,7 +87,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * created above
    */
   retrieveAllEmployees() {
-    this.es.getAllEmployees().subscribe(res => {
+    this.es.getAllEmployees().pipe(first()).subscribe(res => {
       this.employeeList =
       res.map(item => ({
        id: item.payload.doc.id,
