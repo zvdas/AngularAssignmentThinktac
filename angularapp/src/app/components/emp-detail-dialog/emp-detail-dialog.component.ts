@@ -18,9 +18,9 @@ export class EmpDetailDialogComponent implements OnInit {
    * (since html form field loops through below array)
    */
   formControlNames: any[] = [
-    {fcName: 'EMP_ID', label: 'Employee ID'},
-    {fcName: 'Name', label: 'Employee Name'},
-    {fcName: 'Email', label: 'Employee Email'}
+    {fcName: 'EMP_ID', type: 'number', label: 'Employee ID'},
+    {fcName: 'Name', type: 'string', label: 'Employee Name'},
+    {fcName: 'Email', type: 'string', label: 'Employee Email'}
   ]
 
   /**
@@ -28,7 +28,7 @@ export class EmpDetailDialogComponent implements OnInit {
    */
   employeeForm = new FormGroup({
     id: new FormControl(''),
-    EMP_ID: new FormControl([], Validators.required),
+    EMP_ID: new FormControl(0, Validators.required),
     Name: new FormControl('', Validators.required),
     Email: new FormControl('', [Validators.required, Validators.email]),
   })
@@ -53,12 +53,21 @@ export class EmpDetailDialogComponent implements OnInit {
     this.employeeForm.patchValue(this.data.employee);
   }
 
+  finalObject() {
+    return {
+      id: this.employeeForm.value.id,
+      EMP_ID: parseInt(this.employeeForm.value.EMP_ID),
+      Name: this.employeeForm.value.Name,
+      Email: this.employeeForm.value.Email
+    }
+  }
+
   /* Passes form value to the employee service */
   saveEmployee() {
     if(this.data) {
-      this.es.updateEmployeeById(this.data.employee.id, this.employeeForm.value);
+      this.es.updateEmployeeById(this.data.employee.id, this.finalObject());
     } else {
-      this.es.addEmployee(this.employeeForm.value);
+      this.es.addEmployee(this.finalObject());
     }
   }
 

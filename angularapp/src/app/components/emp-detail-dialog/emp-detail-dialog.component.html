@@ -14,7 +14,7 @@
       <!-- Dynamically created forms linked to formControlNames array in ts file -->
       <mat-form-field class="mx-2" appearance="outline">
         <mat-label>{{ control.label }}</mat-label>
-        <input matInput [formControlName]="control.fcName" />
+        <input matInput [type]="control.type" [formControlName]="control.fcName" />
       </mat-form-field>
     </div>
   </mat-dialog-content>
