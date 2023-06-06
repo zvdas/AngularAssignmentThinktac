@@ -1,8 +1,13 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Employee } from 'src/app/models/employee/employee';
+import { Store, select } from '@ngrx/store';
+import { Employee } from '../../models/employee';
 import { EmployeeService } from 'src/app/services/employee/employee.service';
+import { invokeAddEmployee, invokeUpdateEmployee } from 'src/app/state/employees/employees.action';
+import { AppState } from 'src/app/state/app.state';
+import { selectAppState } from 'src/app/state/app.selector';
+import { setApiStatus } from 'src/app/state/app.action';
 
 @Component({
   selector: 'app-emp-detail-dialog',
@@ -40,7 +45,7 @@ export class EmpDetailDialogComponent implements OnInit {
   /**
    * Data Injected into dialog initialized here
    */
-  constructor(@Inject(MAT_DIALOG_DATA) private data: { employee: Employee }, private es: EmployeeService) { }
+  constructor(@Inject(MAT_DIALOG_DATA) private data: { employee: Employee }, private es: EmployeeService, private store: Store, private appStore: Store<AppState>) { }
 
   ngOnInit(): void {
     if(this.data) {
@@ -65,10 +70,19 @@ export class EmpDetailDialogComponent implements OnInit {
   /* Passes form value to the employee service */
   saveEmployee() {
     if(this.data) {
-      this.es.updateEmployeeById(this.data.employee.id, this.finalObject());
+      // this.es.updateEmployeeById(this.data.employee.id, this.finalObject());
+      this.store.dispatch(invokeUpdateEmployee({id: this.data.employee.id, employee: this.finalObject()}));
     } else {
-      this.es.addEmployee(this.finalObject());
+      // this.es.addEmployee(this.finalObject());
+      this.store.dispatch(invokeAddEmployee({employee: this.finalObject()}));
     }
+
+    let apiStatus$ = this.appStore.pipe(select(selectAppState));
+    apiStatus$.subscribe(app => {
+      if(app.apiStatus === 'success') {
+        this.appStore.dispatch(setApiStatus({apiStatus: {apiStatus: '', apiResponseMessage: ''}}))
+      }
+    });
   }
 
 }

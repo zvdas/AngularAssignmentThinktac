@@ -17,12 +17,18 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { environment } from 'src/environments/environment.prod';
 import { HomeComponent } from './components/home/home.component';
 import { EmployeeService } from './services/employee/employee.service';
 import { EmpDetailDialogComponent } from './components/emp-detail-dialog/emp-detail-dialog.component';
+import { employeeReducer } from './state/employees/employees.reducer';
+import { EmployeeEffects } from './state/employees/employees.effect';
 
 @NgModule({
   declarations: [
@@ -46,7 +52,11 @@ import { EmpDetailDialogComponent } from './components/emp-detail-dialog/emp-det
     MatSortModule,
     MatSnackBarModule,
     MatTableModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    StoreModule.forRoot({ appState : employeeReducer}),
+    StoreModule.forFeature('employees', employeeReducer),
+    EffectsModule.forRoot([EmployeeEffects]),
+    StoreDevtoolsModule.instrument({maxAge: 25, logOnly: environment.production})
   ],
   providers: [
     EmployeeService

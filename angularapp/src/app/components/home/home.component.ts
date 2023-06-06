@@ -3,11 +3,17 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Store, select } from '@ngrx/store';
 import { first } from 'rxjs';
 
-import { Employee } from 'src/app/models/employee/employee';
-import { EmployeeService } from 'src/app/services/employee/employee.service';
+import { Employee } from '../../models/employee';
+import { EmployeeService } from '../../services/employee/employee.service';
 import { EmpDetailDialogComponent } from '../emp-detail-dialog/emp-detail-dialog.component';
+import { invokeLoadEmployees, invokeRemoveEmployee } from '../../state/employees/employees.action';
+import { selectEmployees } from '../../state/employees/employees.selector';
+import { AppState } from 'src/app/state/app.state';
+import { selectAppState } from 'src/app/state/app.selector';
+import { setApiStatus } from 'src/app/state/app.action';
 
 @Component({
   selector: 'app-home',
@@ -24,6 +30,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   employeeList: Employee[] = [];
   employeeListLength: number[] = [];
+
+  employees$ = this.store.pipe(select(selectEmployees));
 
   /**
    * Create an empty employee object to store
@@ -70,7 +78,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private es: EmployeeService, private dialog: MatDialog) {}
+  constructor(private es: EmployeeService, private store: Store, private dialog: MatDialog, private appStore: Store<AppState>) {}
 
   ngOnInit(): void {
     this.retrieveAllEmployees();
@@ -83,10 +91,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   /**
    * method to retrieve all the employees from
-   * firstore service and store in employee array
+   * firestore service and store in employee array
    * created above
    */
   retrieveAllEmployees() {
+    this.store.dispatch(invokeLoadEmployees());
+
+    this.employees$.subscribe(res => {
+      this.dataSource.data = this.employeeList = res as Employee[];
+      this.employeeListLength = Array.from({length: this.employeeList.length}, (_,k) => k + 1);
+    });
+
+    /*
+    // using employee service
     this.es.getAllEmployees().pipe(first()).subscribe(res => {
       this.employeeList =
       res.map(item => ({
@@ -98,13 +115,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       this.dataSource.data = this.employeeList;
 
-      /* set page numbers dynamically  based on records retrieved from firestore */
+      // set page numbers dynamically  based on records retrieved from firestore //
       this.employeeListLength = Array.from(
         { length: this.employeeList.length },
         (_, k) => k + 1
       );
     });
-
+    */
   }
 
   /**
@@ -122,17 +139,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * after the dialog closes, passes form data to employee service
    */
   addNewEmployee() {
-    // const dialogRef =
     this.dialog.open(EmpDetailDialogComponent, {
       disableClose: true,
       width: '50%'
     });
-
-    /*
-    dialogRef.afterClosed().subscribe((res) => {
-      this.es.addEmployee(res);
-    });
-    */
   }
 
   /**
@@ -140,25 +150,25 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * after the dialog closes, passes form data to employee service
    */
   editSelectedEmployee(employee: Employee) {
-    // const dialogRef =
     this.dialog.open(EmpDetailDialogComponent, {
       disableClose: true,
       width: '50%',
       data: { employee },
     });
-
-    /*
-    dialogRef.afterClosed().subscribe((res) => {
-      this.es.updateEmployeeById(res.id, res);
-    });
-    */
   }
 
   /**
    * Passes the employee id to deleteEmployeeById method of employee service
    */
   deleteSelectedEmployee(employee: Employee) {
-    this.es.deleteEmployeeById(employee.id);
+    // this.es.deleteEmployeeById(employee.id);
+    this.store.dispatch(invokeRemoveEmployee({id: employee.id}));
+    let apiStatus$ = this.appStore.pipe(select(selectAppState));
+    apiStatus$.subscribe(app => {
+      if(app.apiStatus === 'success') {
+        this.appStore.dispatch(setApiStatus({apiStatus: {apiStatus: '', apiResponseMessage: ''}}));
+      }
+    });
   }
 
 }
