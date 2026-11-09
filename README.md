@@ -5,3 +5,5 @@ The Project is an Employee Table, which implements CRUD operations linked to Fir
 - Dependencies used are Angular Material and Bootstrap
 - CSS has been used to add some styles (without encapsulation: lower level files also contain some css properties)
 - Readme.md provided in angularapp folder with instructions to run the project on other computers
+
+**Note: This is a Take-home assignment from a hiring process.**
